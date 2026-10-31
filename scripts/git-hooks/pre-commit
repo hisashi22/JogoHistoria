@@ -1,0 +1,21 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
+cd "$ROOT_DIR"
+
+branch="$(git rev-parse --abbrev-ref HEAD)"
+if ! [[ "$branch" =~ ^release/([0-9]+\.[0-9]+\.[0-9]+)$ ]]; then
+  exit 0
+fi
+
+expected_version="${BASH_REMATCH[1]}"
+actual_version="$(tr -d ' \t\n\r' < VERSION)"
+
+if [[ "$actual_version" != "$expected_version" ]]; then
+  echo "pre-commit: VERSION mismatch for release branch" >&2
+  echo "  branch:  $branch" >&2
+  echo "  VERSION: $actual_version" >&2
+  echo "Expected VERSION to match release branch version: $expected_version" >&2
+  exit 1
+fi

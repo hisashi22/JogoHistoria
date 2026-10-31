@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="description" content="500 A.D. - Byzantine Empire Strategy Game">
+    <meta name="theme-color" content="#6B2C91">
+    <title>Imperio Bizantino</title>
+    <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
+
+    <!-- Preload critical fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Inter:wght@400;500;600&display=swap"
+        rel="stylesheet">
+
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/ui.css">
+    <link rel="stylesheet" href="css/mobile.css">
+</head>
+
+<body>
+    <!-- Loading Screen -->
+    <div id="loading-screen" class="screen active">
+        <div class="loading-content">
+            <div class="byzantine-emblem"></div>
+            <h1 class="game-title">Imperio Bizantino</h1>
+            <p class="game-subtitle">395-1453 d.C.</p>
+            <div class="loading-bar">
+                <div class="loading-progress" id="loading-progress"></div>
+            </div>
+            <p class="loading-text" id="loading-text">Carregando recursos...</p>
+        </div>
+    </div>
+
+    <!-- Main Menu -->
+    <div id="main-menu" class="screen">
+        <div class="menu-background"></div>
+        <div class="menu-content">
+            <h1 class="game-title">Imperio Bizantino</h1>
+            <p class="game-subtitle">395-1453 d.C.</p>
+
+            <nav class="main-menu-nav">
+                <button class="menu-btn primary" id="btn-new-game">
+                    <span class="btn-icon">⚔️</span>
+                    <span class="btn-text">Nova Campanha</span>
+                </button>
+                <button class="menu-btn" id="btn-continue">
+                    <span class="btn-icon">📜</span>
+                    <span class="btn-text">Continuar</span>
+                </button>
+                <button class="menu-btn" id="btn-load-game">
+                    <span class="btn-icon">💾</span>
+                    <span class="btn-text">Carregar Jogo</span>
+                </button>
+                <button class="menu-btn" id="btn-settings">
+                    <span class="btn-icon">⚙️</span>
+                    <span class="btn-text">Configurações</span>
+                </button>
+                <button class="menu-btn" id="btn-about">
+                    <span class="btn-icon">📖</span>
+                    <span class="btn-text">Sobre</span>
+                </button>
+               
+            </nav>
+        </div>
+    </div>
+
+    <!-- Leader Selection Screen -->
+    <div id="leader-selection" class="screen">
+        <div class="screen-header">
+            <button class="back-btn" id="btn-back-from-leaders">← Voltar</button>
+            <h2>Escolha seu líder</h2>
+        </div>
+
+        <div class="selection-steps">
+            <div class="selection-step">
+                <h3>1. Selecionar século</h3>
+                <div class="century-tabs">
+                    <!-- Populated by JavaScript -->
+                </div>
+            </div>
+
+            <div class="selection-step">
+                <h3>2. Selecione Facção</h3>
+                <div class="faction-tabs">
+                    <!-- Populated by JavaScript -->
+                </div>
+            </div>
+
+            <div class="selection-step">
+                <h3>3. Selecionar Cenário</h3>
+                <div class="scenario-tabs" id="scenario-tabs">
+                    <!-- Populated by JavaScript -->
+                </div>
+            </div>
+
+            <div class="selection-step">
+                <h3>4. Escolha seu líder</h3>
+                <div class="leaders-grid" id="leaders-grid">
+                    <!-- Populated by JavaScript -->
+                </div>
+            </div>
+        </div>
+
+        <div class="leader-detail" id="leader-detail">
+            <div class="leader-portrait-large" id="leader-portrait-large"></div>
+            <div class="leader-info">
+                <h3 id="leader-name"></h3>
+                <p class="leader-title" id="leader-title"></p>
+                <p class="leader-years" id="leader-years"></p>
+                <div class="leader-stats" id="leader-stats"></div>
+                <p class="leader-bio" id="leader-bio"></p>
+                <div class="leader-abilities" id="leader-abilities"></div>
+                <button class="btn-primary btn-large" id="btn-select-leader">Iniciar Campanha</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Game Screen -->
+    <div id="game-screen" class="screen">
+        <!-- HUD -->
+        <div class="game-hud">
+            <div class="hud-top">
+                <div class="hud-resources">
+                    <div class="resource">
+                        <span class="resource-icon">💰</span>
+                        <span class="resource-value" id="resource-gold">1000</span>
+                    </div>
+                    <div class="resource">
+                        <span class="resource-icon">👥</span>
+                        <span class="resource-value" id="resource-manpower">500</span>
+                    </div>
+                    <div class="resource">
+                        <span class="resource-icon">⭐</span>
+                        <span class="resource-value" id="resource-prestige">100</span>
+                    </div>
+                    <div class="resource" title="Food stockpile">
+                        <span class="resource-icon">🌾</span>
+                        <span class="resource-value" id="resource-food">0</span>
+                    </div>
+                    <div class="resource" title="Wood stockpile">
+                        <span class="resource-icon">🪵</span>
+                        <span class="resource-value" id="resource-wood">0</span>
+                    </div>
+                    <div class="resource" title="Stone stockpile">
+                        <span class="resource-icon">🪨</span>
+                        <span class="resource-value" id="resource-stone">0</span>
+                    </div>
+                    <div class="resource" title="Iron stockpile">
+                        <span class="resource-icon">⛓️</span>
+                        <span class="resource-value" id="resource-iron">0</span>
+                    </div>
+                    <div class="resource" title="Rare materials">
+                        <span class="resource-icon">💎</span>
+                        <span class="resource-value" id="resource-rare">0</span>
+                    </div>
+                </div>
+
+                <div class="hud-turn">
+                    <span class="turn-label">Turno: </span>
+                    <span class="turn-value" id="turn-number">1</span>
+                </div>
+
+                <div class="hud-actions">
+                   <!-- <button class="hud-btn hud-btn--history" id="btn-scenario-info" type="button" aria-label="Learn more about this battle on NeoByzantine.org" title="Learn more about this battle on NeoByzantine.org" style="display:none">📖</button>-->
+                    <button class="hud-btn" id="btn-menu" title="Menu">☰</button>
+                    <button class="hud-btn" id="btn-save" title="Save">💾</button>
+                </div>
+            </div>
+
+            <div class="hud-minimap">
+                <div class="minimap-header">
+                    <span class="minimap-title">Mapa Mundi</span>
+                    <span class="minimap-hint">Clique ou arraste para mover a tela</span>
+                </div>
+                <div class="minimap-container">
+                    <canvas id="minimap-canvas"></canvas>
+                    <div class="minimap-viewport" id="minimap-viewport"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Game Map -->
+        <div class="game-map-container">
+            <canvas id="game-map" width="800" height="600"></canvas>
+        </div>
+
+        <!-- Command Overview -->
+        <aside class="command-overview" id="command-overview" aria-label="Command overview panels">
+            <div class="overview-header">
+                <h3>Guia rápido de comandos</h3>
+                <div class="overview-header-actions">
+                    <button class="overview-icon-btn" id="btn-overview-help" title="Show contextual help" aria-label="Show contextual help" aria-pressed="false" aria-expanded="false" aria-controls="overview-help-text">?</button>
+                    <button class="overview-icon-btn" id="btn-overview-toggle" title="Collapse overview panel" aria-label="Collapse overview panel" aria-expanded="true" aria-controls="command-overview">−</button>
+                </div>
+            </div>
+            <div class="overview-help" id="overview-help-text">
+                Passar o mouse ou tocar nos cards para ver dicas do que fazer. Use as ações rápidas para pular direto pra diplomacia, construção de cidade, recrutamento e missões.
+            </div>
+            <div class="overview-grid" id="overview-grid">
+                <section class="overview-card" id="overview-resources">
+                    <h4 tabindex="0" data-tip="Live snapshot of strategic stockpiles and military readiness." title="Live snapshot of strategic stockpiles and military readiness.">Recursos</h4>
+                    <div class="overview-card-body">Nenhum dado por enquanto.</div>
+                </section>
+                <section class="overview-card" id="overview-faction">
+                    <h4 tabindex="0" data-tip="Summarized diplomacy and threat posture from known factions." title="Summarized diplomacy and threat posture from known factions.">Dados da facção</h4>
+                    <div class="overview-card-body">Nenhum dado por enquanto.</div>
+                </section>
+                <section class="overview-card" id="overview-cities">
+                    <h4 tabindex="0" data-tip="Shows city queue pressure and construction posture." title="Shows city queue pressure and construction posture.">Gestão da cidade</h4>
+                    <div class="overview-card-body">Nenhum dado por enquanto.</div>
+                </section>
+                <section class="overview-card" id="overview-events">
+                    <h4 tabindex="0" data-tip="Active narrative pressure and most recent quest/event activity." title="Active narrative pressure and most recent quest/event activity.">Eventos</h4>
+                    <div class="overview-card-body">Nenhum dado por enquanto.</div>
+                </section>
+            </div>
+            <div class="overview-actions">
+                    <button class="overview-action-btn" data-overview-action="build" title="Open city build actions">Construir</button>
+                    <button class="overview-action-btn" data-overview-action="recruit" title="Open city recruitment">Recrutar</button>
+                    <button class="overview-action-btn" data-overview-action="diplomacy" title="Open diplomacy screen">Diplomacia</button>
+                    <button class="overview-action-btn" data-overview-action="quests" title="Open quests and events">Missões</button>
+            </div>
+        </aside>
+
+        <!-- Unit Panel -->
+        <div class="unit-panel" id="unit-panel">
+            <div class="unit-panel-header">
+                <div>
+                    <h3 id="selected-unit-name">Nenhuma unidade selecionada</h3>
+                    <div class="unit-panel-meta" id="unit-panel-meta"></div>
+                </div>
+                <button class="close-btn" id="btn-close-unit-panel" onclick="uiManager.closeUnitPanel()">×</button>
+            </div>
+            <div class="unit-panel-content">
+                <div class="unit-portrait" id="selected-unit-portrait"></div>
+                <div class="unit-stats-grid">
+                    <div class="stat">
+                        <span class="stat-label">Vida</span>
+                        <div class="stat-bar">
+                            <div class="stat-bar-fill" id="unit-health-bar"></div>
+                        </div>
+                        <span class="stat-value" id="unit-health-value">100/100</span>
+                    </div>
+                    <div class="stat">
+                        <span class="stat-label">Ataque</span>
+                        <span class="stat-value" id="unit-attack">10</span>
+                    </div>
+                    <div class="stat">
+                        <span class="stat-label">Defesa</span>
+                        <span class="stat-value" id="unit-defense">8</span>
+                    </div>
+                    <div class="stat">
+                        <span class="stat-label">Movimento</span>
+                        <span class="stat-value" id="unit-movement">3/3</span>
+                    </div>
+                </div>
+                <div class="unit-actions">
+                    <button class="action-btn" id="btn-move-unit">Mover</button>
+                    <button class="action-btn" id="btn-attack-unit">Atacar</button>
+                    <button class="action-btn" id="btn-fortify-unit">Fortalecer</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Action Bar -->
+        <div class="action-bar">
+            <button class="action-bar-btn" id="btn-recruit">
+                <span class="btn-icon">⚔️</span>
+                <span class="btn-label">Recrutar</span>
+            </button>
+            <button class="action-bar-btn" id="btn-build">
+                <span class="btn-icon">🏛️</span>
+                <span class="btn-label">Construir</span>
+            </button>
+            <button class="action-bar-btn" id="btn-tech">
+                <span class="btn-icon">📚</span>
+                <span class="btn-label">Tecnologia</span>
+            </button>
+            <button class="action-bar-btn" id="btn-diplomacy">
+                <span class="btn-icon">🤝</span>
+                <span class="btn-label">Diplomacia</span>
+            </button>
+            <button class="action-bar-btn" id="btn-quests">
+                <span class="btn-icon">📜</span>
+                <span class="btn-label">Missões</span>
+            </button>
+            <button class="action-bar-btn" id="btn-achievements">
+                <span class="btn-icon">🏆</span>
+                <span class="btn-label">Conquistas</span>
+            </button>
+            <button class="action-bar-btn primary" id="btn-end-turn">
+                <span class="btn-icon">⏭️</span>
+                <span class="btn-label">Encerrar o turno </span>, 
+            </button>
+        </div>
+    </div>
+
+    <!-- Turn Processing Overlay -->
+    <div id="turn-processing-overlay" class="turn-processing-overlay" aria-live="polite" aria-hidden="true">
+        <div class="turn-processing-card">
+            <div class="turn-spinner" aria-hidden="true"></div>
+            <div class="turn-processing-title">Carregando o turno...</div>
+            <div class="turn-processing-subtitle">Espere aí enquanto os oponentes jogam...</div>
+        </div>
+    </div>
+
+    <!-- Modal Overlays -->
+    <div id="modal-overlay" class="modal-overlay">
+        <div class="modal" id="modal-content">
+            <!-- Modal content will be populated by JavaScript -->
+        </div>
+    </div>
+
+    <!-- Notification Container -->
+    <div id="notification-container"></div>
+
+    <!-- Scripts -->
+    <script src="assets/version.js"></script>
+    <script src="assets/geography.js"></script>
+    <script src="assets/symbols.js"></script>
+    <script src="js/performance.js"></script>
+    <script src="js/storage.js"></script>
+    <script src="js/achievements.js"></script>
+    <script src="js/audio.js"></script>
+    <script src="js/leaders.js"></script>
+    <script src="js/units.js"></script>
+    <script src="js/mods.js"></script>
+    <script src="js/scenarios.js"></script>
+    <script src="js/map.js"></script>
+    <script src="js/minimap.js"></script>
+    <script src="js/combat.js"></script>
+    <script src="js/state.js"></script>
+    <script src="js/ai.js"></script>
+    <script src="js/ui.js"></script>
+    <script src="js/game.js"></script>
+</body>
+
+</html>

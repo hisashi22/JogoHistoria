@@ -1,0 +1,9 @@
+{
+  "schema_version": "1.0",
+  "note": "Placeholder. Replace with an exported location set for the chosen era, matching the bounds and grid below; each locations[] entry needs id, name, tile_x, tile_y, lng, lat and type.",
+  "exported_at": null,
+  "era": null,
+  "bounds": { "west": -15, "east": 92, "north": 60, "south": 5 },
+  "grid": { "width": 320, "height": 180 },
+  "locations": []
+}

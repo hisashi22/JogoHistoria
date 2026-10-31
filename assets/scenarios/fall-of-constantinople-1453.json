@@ -1,0 +1,56 @@
+{
+  "schema_version": "1.0",
+  "id": "fall-of-constantinople-1453",
+  "title": "Queda de Constantinopla (1453)",
+  "description": "O Sultão Mehmed II cerca Constantinopla com um exército de 80.000 a 200.000 tropas, um trem de artilharia massivo incluindo o canhão Basílica e um bloqueio naval. O último Imperador Bizantino, Constantino XI Paleólogo, cai defendendo as muralhas. Após 1.123 anos, o Império Romano do Oriente chega ao fim.",
+  "date_year": 1453,
+  "date_display": "29 de maio de 1453",
+  "century": "15",
+  "map_center": {
+    "lat": 41.01,
+    "lng": 28.97,
+    "tile_x": 146,
+    "tile_y": 68
+  },
+  "map_zoom": 4,
+  "forces": [
+    {
+      "faction": "byzantine",
+      "commander": "Constantino XI Paleólogo",
+      "actor_slug": "constantine-xi-palaiologos",
+      "position": {
+        "lat": 41.01,
+        "lng": 28.92,
+        "tile_x": 145,
+        "tile_y": 68
+      },
+      "units": ["infantry", "varangian_guard", "archers", "navy"],
+      "strength": "~7.000–10.000 defensores (incl. mercenários genoveses)"
+    },
+    {
+      "faction": "ottoman",
+      "commander": "Mehmed II",
+      "actor_slug": "mehmed-ii",
+      "position": {
+        "lat": 41.01,
+        "lng": 29.05,
+        "tile_x": 147,
+        "tile_y": 68
+      },
+      "units": ["infantry", "heavy_cavalry", "siege", "horse_archers", "navy"],
+      "strength": "~80.000–200.000 (disputado)"
+    }
+  ],
+  "objectives": [
+    {
+      "location_id": "constantinople",
+      "name": "Constantinopla",
+      "tile_x": 146,
+      "tile_y": 68,
+      "type": "capital"
+    }
+  ],
+  "historical_notes": "Constantino XI recusou-se a render a cidade ou fugir. Ele morreu lutando nas muralhas ao lado de seus soldados em 29 de maio de 1453. Seu corpo nunca foi identificado de forma conclusiva. A cidade foi renomeada para Istambul. O Patriarcado Ortodoxo permaneceu na cidade sob o domínio otomano. A data é comemorada anualmente na Grécia como um dia de luto nacional.",
+  "neobyzantine_event_url": "https://neobyzantine.org/timeline/fall-of-constantinople-1453",
+  "source": "bundled"
+}

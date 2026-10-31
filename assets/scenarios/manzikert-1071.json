@@ -1,0 +1,56 @@
+{
+  "schema_version": "1.0",
+  "id": "manzikert-1071",
+  "title": "Batalha de Manzikert (1071)",
+  "description": "O Sultão Seljúcida Alp Arslan esmaga o exército bizantino do Imperador Romano IV Diógenes perto da cidade de Manzikert (atual Malazgirt, Turquia). A derrota bizantina abre a Anatólia ao povoamento turco e marca o início do declínio bizantino no Oriente.",
+  "date_year": 1071,
+  "date_display": "26 de agosto de 1071",
+  "century": "11",
+  "map_center": {
+    "lat": 39.05,
+    "lng": 42.87,
+    "tile_x": 176,
+    "tile_y": 73
+  },
+  "map_zoom": 5,
+  "forces": [
+    {
+      "faction": "byzantine",
+      "commander": "Romano IV Diógenes",
+      "actor_slug": "romanos-iv-diogenes",
+      "position": {
+        "lat": 38.90,
+        "lng": 42.70,
+        "tile_x": 175,
+        "tile_y": 74
+      },
+      "units": ["heavy_cavalry", "tagmata", "archers", "varangian_guard", "infantry"],
+      "strength": "~40.000 (disputado)"
+    },
+    {
+      "faction": "seljuk",
+      "commander": "Alp Arslan",
+      "actor_slug": "alp-arslan",
+      "position": {
+        "lat": 39.20,
+        "lng": 43.05,
+        "tile_x": 177,
+        "tile_y": 72
+      },
+      "units": ["horse_archers", "heavy_cavalry"],
+      "strength": "~30.000–100.000 (disputado)"
+    }
+  ],
+  "objectives": [
+    {
+      "location_id": "manzikert",
+      "name": "Manzikert",
+      "tile_x": 176,
+      "tile_y": 73,
+      "type": "city"
+    }
+  ],
+  "historical_notes": "Romano IV foi capturado durante a batalha — o primeiro imperador bizantino feito prisioneiro em séculos. Os termos de paz que ele negociou foram repudiados pela regência em Constantinopla. Alp Arslan foi assassinado pouco tempo depois. A batalha é considerada o ponto de virada que tornou a Anatólia permanentemente turca.",
+  "neobyzantine_event_url": "https://neobyzantine.org/timeline/battle-of-manzikert-1071",
+  "source": "bundled"
+}

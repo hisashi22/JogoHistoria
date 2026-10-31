@@ -1,0 +1,14 @@
+Fix PR:
+
+Note:
+- This checklist is intentionally committed for maintainers/agents to follow a consistent PR-fix workflow.
+
+Steps:
+1. Read the PR review issues and conversations.
+2. Modify the code accordingly.
+3. Create or update files as needed.
+4. Only if needed - update the documentation (docs), CHANGELOG and/or README where needed.
+5. Do the testing before making commits with appropriate messages
+6. Commit, push the code changes.
+7. Resolve the conversations for all the fixed issues in the PR
+8. Re-request code review from the same reviewer
