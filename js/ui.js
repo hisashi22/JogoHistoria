@@ -1474,7 +1474,10 @@ ${this.escapeHtml(entry.resolvedTurn ?? entry.createdTurn ?? gameState.turn)}</p
         const resources = document.getElementById('hud-resources');
         const button = document.getElementById('btn-resources-toggle');
 
-        if (!resources || !button) return;
+        if (!resources || !button) {
+            alert('Erro: botão ou painel de recursos não encontrado!');
+            return;
+        }
 
         const expanded = resources.classList.toggle('is-expanded');
 
