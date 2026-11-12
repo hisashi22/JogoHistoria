@@ -158,6 +158,15 @@ class UIManager {
             this.toggleResourcesPanel();
         });
 
+        document.getElementById('btn-action-menu-toggle')?.addEventListener('click', () => {
+            audioManager.playUISound('click');
+            this.toggleActionMenu();
+        });
+
+        document.querySelectorAll('#action-menu .action-bar-btn').forEach(button => {
+            button.addEventListener('click', () => this.toggleActionMenu(false));
+        });
+
         document.getElementById('btn-scenario-info')?.addEventListener('click', () => {
             const url = neobyzantineLink(gameState?.activeScenario?.neobyzantineUrl);
             if (url) {
@@ -1470,14 +1479,31 @@ ${this.escapeHtml(entry.resolvedTurn ?? entry.createdTurn ?? gameState.turn)}</p
         }
     }
 
+    toggleActionMenu(force) {
+        const menu = document.getElementById('action-menu');
+        const button = document.getElementById('btn-action-menu-toggle');
+
+        if (!menu || !button) return;
+
+        const expanded = typeof force === 'boolean'
+            ? force
+            : !menu.classList.contains('is-expanded');
+
+        menu.classList.toggle('is-expanded', expanded);
+        button.setAttribute('aria-expanded', String(expanded));
+
+        const arrow = button.querySelector('.action-menu-arrow');
+        if (arrow) arrow.textContent = expanded ? '▲' : '▼';
+
+        this.updateGameLayoutMetrics();
+        requestAnimationFrame(() => this.updateGameLayoutMetrics());
+    }
+
     toggleResourcesPanel() {
         const resources = document.getElementById('hud-resources');
         const button = document.getElementById('btn-resources-toggle');
 
-        if (!resources || !button) {
-            alert('Erro: botão ou painel de recursos não encontrado!');
-            return;
-        }
+        if (!resources || !button) return;
 
         const expanded = resources.classList.toggle('is-expanded');
 

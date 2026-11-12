@@ -280,7 +280,18 @@
 
         <!-- Action Bar -->
         <div class="action-bar">
-            <button class="action-bar-btn" id="btn-recruit">
+            <button
+                class="action-bar-btn action-menu-toggle"
+                id="btn-action-menu-toggle"
+                type="button"
+                aria-expanded="false"
+                aria-controls="action-menu">
+                <span class="btn-icon">⚔️</span>
+                <span class="btn-label">Ações <span class="action-menu-arrow">▼</span></span>
+            </button>
+
+            <div class="action-menu" id="action-menu">
+                <button class="action-bar-btn" id="btn-recruit">
                 <span class="btn-icon">⚔️</span>
                 <span class="btn-label">Recrutar</span>
             </button>
@@ -304,6 +315,7 @@
                 <span class="btn-icon">🏆</span>
                 <span class="btn-label">Conquistas</span>
             </button>
+            </div>
             <button class="action-bar-btn primary" id="btn-end-turn">
                 <span class="btn-icon">⏭️</span>
                 <span class="btn-label">Encerrar o turno</span>
