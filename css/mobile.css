@@ -1335,3 +1335,85 @@ textarea {
         margin: 0;
     }
 }
+
+/* =========================================
+   HUD MOBILE - ORGANIZAÇÃO FINAL
+   ========================================= */
+
+@media (max-width: 768px) {
+
+    .hud-top {
+        display: grid !important;
+        grid-template-columns: minmax(0, 1fr) auto;
+        grid-template-areas:
+            "toggle actions"
+            "turn minimap";
+        align-items: center;
+        gap: 10px;
+        width: 100%;
+    }
+
+    /* Botão de recursos */
+    .hud-resources-toggle {
+        grid-area: toggle;
+        display: flex !important;
+        width: clamp(110px, 35vw, 145px);
+        max-width: 100%;
+        justify-self: start;
+        margin: 0;
+    }
+
+    /* Botões de menu e salvar */
+    .hud-actions {
+        grid-area: actions;
+        display: flex !important;
+        justify-self: end;
+        align-items: center;
+        gap: 6px;
+        margin: 0;
+    }
+
+    /* Indicador de turno */
+    .hud-turn {
+        grid-area: turn;
+        min-width: 0;
+        width: 100%;
+        margin: 0;
+        align-self: center;
+    }
+
+    /* Minimapa ao lado do turno */
+    .hud-minimap {
+        grid-area: minimap;
+        display: block !important;
+        position: relative;
+        justify-self: end;
+        align-self: center;
+        min-width: 0;
+        width: auto;
+        margin: 0;
+    }
+
+    /* Recursos fechados */
+    .hud-resources {
+        display: none !important;
+    }
+
+    /* Recursos abertos: ocupam uma linha própria */
+    .hud-top.resources-open {
+        grid-template-areas:
+            "toggle actions"
+            "resources resources"
+            "turn minimap";
+    }
+
+    .hud-top.resources-open .hud-resources {
+        grid-area: resources;
+        display: grid !important;
+        position: relative;
+        width: 100%;
+        height: auto;
+        margin: 0;
+        z-index: 2;
+    }
+}

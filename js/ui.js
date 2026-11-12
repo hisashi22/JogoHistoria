@@ -1511,6 +1511,12 @@ ${this.escapeHtml(entry.resolvedTurn ?? entry.createdTurn ?? gameState.turn)}</p
 
         const expanded = resources.classList.toggle('is-expanded');
 
+        const hudTop = resources.closest('.hud-top');
+
+        if (hudTop) {
+            hudTop.classList.toggle('resources-open', expanded);
+        }
+
         button.setAttribute('aria-expanded', String(expanded));
 
         const arrow = button.querySelector('span');
