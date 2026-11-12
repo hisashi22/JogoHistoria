@@ -1044,3 +1044,48 @@ textarea {
         min-width: 44px;
     }
 }
+
+
+/* Painel expansível de recursos - Mobile */
+
+.hud-resources-toggle {
+    display: none;
+}
+
+@media (max-width: 768px) {
+
+    .hud-resources-toggle {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+
+        width: 100%;
+        min-height: 42px;
+        padding: 8px 12px;
+
+        border: 1px solid rgba(212, 175, 55, 0.55);
+        border-radius: 8px;
+
+        background: rgba(15, 23, 42, 0.95);
+        color: var(--gold-light);
+
+        font-family: inherit;
+        font-size: 0.9rem;
+        font-weight: 700;
+
+        cursor: pointer;
+    }
+
+    .hud-resources {
+        display: none;
+    }
+
+    .hud-resources.is-expanded {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 4px;
+
+        width: 100%;
+        flex: 1 1 100%;
+    }
+}

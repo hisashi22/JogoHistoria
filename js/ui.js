@@ -153,6 +153,11 @@ class UIManager {
             this.showGameMenu();
         });
 
+        document.getElementById('btn-resources-toggle')?.addEventListener('click', () => {
+            audioManager.playUISound('click');
+            this.toggleResourcesPanel();
+        });
+
         document.getElementById('btn-scenario-info')?.addEventListener('click', () => {
             const url = neobyzantineLink(gameState?.activeScenario?.neobyzantineUrl);
             if (url) {
@@ -1463,6 +1468,29 @@ ${this.escapeHtml(entry.resolvedTurn ?? entry.createdTurn ?? gameState.turn)}</p
             // Refresh immediately on expand so card data is never stale.
             this.updateCommandOverview();
         }
+    }
+
+    toggleResourcesPanel() {
+        const resources = document.getElementById('hud-resources');
+        const button = document.getElementById('btn-resources-toggle');
+
+        if (!resources || !button) return;
+
+        const expanded = resources.classList.toggle('is-expanded');
+
+        button.setAttribute('aria-expanded', String(expanded));
+
+        const arrow = button.querySelector('span');
+
+        if (arrow) {
+            arrow.textContent = expanded ? '▲' : '▼';
+        }
+
+        this.updateGameLayoutMetrics();
+
+        requestAnimationFrame(() => {
+            this.updateGameLayoutMetrics();
+        });
     }
 
     toggleOverviewHelp() {

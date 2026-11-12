@@ -128,7 +128,15 @@
         <!-- HUD -->
         <div class="game-hud">
             <div class="hud-top">
-                <div class="hud-resources">
+                <button
+                    class="hud-resources-toggle"
+                    id="btn-resources-toggle"
+                    type="button"
+                    aria-expanded="false"
+                    aria-controls="hud-resources">
+                    💰 Recursos <span>▼</span>
+                </button>
+                <div class="hud-resources" id="hud-resources">
                     <div class="resource">
                         <span class="resource-icon">💰</span>
                         <span class="resource-value" id="resource-gold">1000</span>
