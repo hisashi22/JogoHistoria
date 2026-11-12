@@ -1493,10 +1493,14 @@ ${this.escapeHtml(entry.resolvedTurn ?? entry.createdTurn ?? gameState.turn)}</p
         button.setAttribute('aria-expanded', String(expanded));
 
         const arrow = button.querySelector('.action-menu-arrow');
-        if (arrow) arrow.textContent = expanded ? '▲' : '▼';
+        if (arrow){
+            arrow.textContent = expanded ? '▲' : '▼';
+        }
 
         this.updateGameLayoutMetrics();
-        requestAnimationFrame(() => this.updateGameLayoutMetrics());
+        requestAnimationFrame(() => {
+            this.updateGameLayoutMetrics()
+        });
     }
 
     toggleResourcesPanel() {
