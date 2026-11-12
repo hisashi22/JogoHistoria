@@ -120,7 +120,7 @@ class UIManager {
         document.querySelectorAll('.century-tab').forEach(tab => {
             tab.addEventListener('click', (e) => {
                 audioManager.playUISound('click');
-                this.switchCentury(e.target.dataset.century);
+                this.switchCentury(e.currentTarget.dataset.century);
             });
         });
 
@@ -128,7 +128,7 @@ class UIManager {
         document.querySelectorAll('.faction-tab').forEach(tab => {
             tab.addEventListener('click', (e) => {
                 audioManager.playUISound('click');
-                this.switchFaction(e.target.dataset.faction);
+                this.switchFaction(e.currentTarget.dataset.faction);
             });
         });
 
@@ -259,6 +259,38 @@ class UIManager {
             this.screens[screenName].classList.add('active');
             this.currentScreen = screenName;
             this.updateTutorialPanelVisibility();
+            if (screenName === 'game') {
+                this.setupGameLayoutMetrics();
+            }
+        }
+    }
+
+    /**
+     * Publish HUD/action-bar heights as CSS variables so floating panels
+     * (command overview, tutorial) can be positioned clear of them on any screen size.
+     */
+    updateGameLayoutMetrics() {
+        const screen = document.getElementById('game-screen');
+        if (!screen) return;
+        const hud = screen.querySelector('.game-hud');
+        const bar = screen.querySelector('.action-bar');
+        if (hud) screen.style.setProperty('--hud-h', `${Math.ceil(hud.getBoundingClientRect().height)}px`);
+        if (bar) screen.style.setProperty('--bar-h', `${Math.ceil(bar.getBoundingClientRect().height)}px`);
+    }
+
+    setupGameLayoutMetrics() {
+        this.updateGameLayoutMetrics();
+        requestAnimationFrame(() => this.updateGameLayoutMetrics());
+        if (this._layoutMetricsReady) return;
+        this._layoutMetricsReady = true;
+        const refresh = () => this.updateGameLayoutMetrics();
+        window.addEventListener('resize', refresh);
+        window.addEventListener('orientationchange', refresh);
+        if (typeof ResizeObserver !== 'undefined') {
+            const observer = new ResizeObserver(refresh);
+            const screen = document.getElementById('game-screen');
+            screen?.querySelector('.game-hud') && observer.observe(screen.querySelector('.game-hud'));
+            screen?.querySelector('.action-bar') && observer.observe(screen.querySelector('.action-bar'));
         }
     }
 
@@ -579,27 +611,6 @@ class UIManager {
     }
 
     /**
-     * Switch era tab
-     */
-    switchEra(era) {
-        this.currentEra = era;
-
-        // Update tab styles
-        document.querySelectorAll('.era-tab').forEach(tab => {
-            tab.classList.remove('active');
-            if (tab.dataset.era === era) {
-                tab.classList.add('active');
-            }
-        });
-
-        // Populate leaders
-        this.populateLeaders(era);
-
-        // Hide detail panel
-        document.getElementById('leader-detail')?.classList.remove('active');
-    }
-
-    /**
      * Start game with selected leader
      */
     async startGame() {
@@ -646,7 +657,7 @@ class UIManager {
             audioManager.playMusic('500ad_ambient');
             const notifMsg = historicalScenario
                 ? historicalScenario.title
-                : `Scenario: ${this.selectedScenario === SCENARIOS.empire ? 'Gerenciando um Império' : 'Construindo a Civilização'}`;
+                : `Cenário: ${this.selectedScenario === SCENARIOS.empire ? 'Gerenciando um Império' : 'Construindo a Civilização'}`;
             this.showNotification(notifMsg, 'info');
             this.startTutorial({ replay: false });
         } else {
@@ -727,7 +738,7 @@ class UIManager {
 
                 if (completedEntries.length > 0) {
                     const completedText = completedEntries
-                        .map((entry) => `${entry.unit?.name || 'Unit'} at ${entry.cityName}`)
+                        .map((entry) => `${entry.unit?.name || 'Unidade'} em ${entry.cityName}`)
                         .join(', ');
                     this.showNotification(`Treinamento concluído: ${completedText}`, 'success');
                 }
@@ -864,9 +875,9 @@ class UIManager {
         };
         const infrastructureChoices = gameState.getBuildActionOptions(tile).map((entry) => ({
             id: `infra:${entry.actionId}`,
-            title: `${entry.action?.name || entry.actionId} [Infrastructure]`,
+            title: `${entry.action?.name || entry.actionId} [Infraestrutura]`,
             subtitle: `${entry.action?.gold || 0}g / ${entry.action?.manpower || 0}m / ${entry.action?.prestige || 0}p`,
-            detail: entry.available ? 'Available' : entry.reasons.join(' • '),
+            detail: entry.available ? 'Disponível' : entry.reasons.join(' • '),
             disabled: !entry.available
         }));
         const choices = hasCity
@@ -1584,6 +1595,42 @@ ${this.escapeHtml(entry.resolvedTurn ?? entry.createdTurn ?? gameState.turn)}</p
     }
 
     /**
+     * Close the currently visible unit information panel.
+     * This only hides the UI panel; it does not change the selected unit or game state.
+     */
+    returnToMainMenu() {
+        this.closeModal();
+        this.closeUnitPanel();
+        if (typeof audioManager !== 'undefined' && audioManager) {
+            audioManager.stopMusic();
+        }
+        if (typeof gameState !== 'undefined' && gameState) {
+            gameState.selectedUnit = null;
+        }
+        if (typeof gameMap !== 'undefined' && gameMap) {
+            gameMap.selectedTile = null;
+            gameMap.awaitingMoveOrder = false;
+        }
+        this.showScreen('mainMenu');
+    }
+
+    closeUnitPanel() {
+        const panel = document.getElementById('unit-panel');
+        if (!panel) return;
+        panel.classList.remove('active', 'enemy-panel');
+    }
+
+    /**
+     * Hide the unit panel while the player is choosing a movement destination.
+     * The movement order and selected unit remain managed by the existing game logic.
+     */
+    hideUnitPanelForMapTargeting() {
+        const panel = document.getElementById('unit-panel');
+        if (!panel) return;
+        panel.classList.remove('active');
+    }
+
+    /**
      * Show unit panel
      */
     showUnitPanel(unit, options = {}) {
@@ -1687,7 +1734,7 @@ ${this.escapeHtml(entry.resolvedTurn ?? entry.createdTurn ?? gameState.turn)}</p
         if (!unit || unit.owner !== 'player') return null;
         const isSelected = gameState?.selectedUnit?.id === unit.id;
         if (!isSelected) return null;
-        return Boolean(gameMap?.awaitingMoveOrder) ? 'Mode de Movimento: LIGADO' : 'Mode de Movimento: DESLIGADO';
+        return Boolean(gameMap?.awaitingMoveOrder) ? 'Modo de Movimento: LIGADO' : 'Modo de Movimento: DESLIGADO';
     }
 
     formatFactionName(factionId) {
@@ -1803,14 +1850,14 @@ ${this.escapeHtml(entry.resolvedTurn ?? entry.createdTurn ?? gameState.turn)}</p
         const attackBtn = document.createElement('button');
         attackBtn.className = 'action-btn';
         attackBtn.id = 'btn-attack-unit';
-        attackBtn.textContent = 'Attack';
+        attackBtn.textContent = 'Atacar';
         attackBtn.onclick = withClickSound(() => this.attackWithSelectedUnit());
         container.appendChild(attackBtn);
 
         const fortBtn = document.createElement('button');
         fortBtn.className = 'action-btn';
         fortBtn.id = 'btn-fortify-unit';
-        fortBtn.textContent = 'Fortify';
+        fortBtn.textContent = 'Fortalecer';
         fortBtn.onclick = withClickSound(() => this.fortifySelectedUnit());
         container.appendChild(fortBtn);
 
@@ -2036,6 +2083,68 @@ ${this.escapeHtml(entry.resolvedTurn ?? entry.createdTurn ?? gameState.turn)}</p
         const panel = document.createElement('section');
         panel.id = 'tutorial-panel';
         panel.className = 'tutorial-panel';
+
+        // The tutorial is a movable utility window. Pointer Events support
+        // mouse, pen and touch without changing tutorial/game progression.
+        let dragState = null;
+        panel.addEventListener('pointerdown', (event) => {
+            const handle = event.target.closest('.tutorial-header');
+            if (!handle || event.target.closest('button')) return;
+            if (event.pointerType === 'mouse' && event.button !== 0) return;
+
+            const rect = panel.getBoundingClientRect();
+            panel.style.left = `${rect.left}px`;
+            panel.style.top = `${rect.top}px`;
+            panel.style.right = 'auto';
+            panel.style.bottom = 'auto';
+            panel.style.transform = 'none';
+            dragState = {
+                pointerId: event.pointerId,
+                offsetX: event.clientX - rect.left,
+                offsetY: event.clientY - rect.top
+            };
+            panel.classList.add('is-dragging');
+            panel.setPointerCapture(event.pointerId);
+            event.preventDefault();
+        });
+        panel.addEventListener('pointermove', (event) => {
+            if (!dragState || event.pointerId !== dragState.pointerId) return;
+            const maxLeft = Math.max(0, window.innerWidth - panel.offsetWidth);
+            const maxTop = Math.max(0, window.innerHeight - panel.offsetHeight);
+            const left = Math.min(maxLeft, Math.max(0, event.clientX - dragState.offsetX));
+            const top = Math.min(maxTop, Math.max(0, event.clientY - dragState.offsetY));
+            panel.style.left = `${left}px`;
+            panel.style.top = `${top}px`;
+        });
+        const stopDragging = (event) => {
+            if (!dragState || event.pointerId !== dragState.pointerId) return;
+            if (panel.hasPointerCapture(event.pointerId)) panel.releasePointerCapture(event.pointerId);
+            dragState = null;
+            panel.classList.remove('is-dragging');
+        };
+        panel.addEventListener('pointerup', stopDragging);
+        panel.addEventListener('pointercancel', stopDragging);
+        window.addEventListener('resize', () => {
+            // Keep a manually positioned tutorial window inside the viewport
+            // after resizing or rotating the device.
+            if (!panel.style.left && !panel.style.top) return;
+            const maxLeft = Math.max(0, window.innerWidth - panel.offsetWidth);
+            const maxTop = Math.max(0, window.innerHeight - panel.offsetHeight);
+            const currentLeft = panel.style.left ? parseFloat(panel.style.left) : panel.getBoundingClientRect().left;
+            const currentTop = panel.style.top ? parseFloat(panel.style.top) : panel.getBoundingClientRect().top;
+            panel.style.left = `${Math.min(maxLeft, Math.max(0, currentLeft))}px`;
+            panel.style.top = `${Math.min(maxTop, Math.max(0, currentTop))}px`;
+        });
+
+        panel.addEventListener('click', (event) => {
+            const toggle = event.target.closest('[data-tutorial="minimize"]');
+            if (!toggle) return;
+            const minimized = panel.classList.toggle('is-minimized');
+            toggle.setAttribute('aria-expanded', String(!minimized));
+            toggle.setAttribute('aria-label', minimized ? 'Restaurar tutorial' : 'Minimizar tutorial');
+            toggle.textContent = minimized ? '+' : '−';
+        });
+
         document.body.appendChild(panel);
         this.tutorialPanel = panel;
         return panel;
@@ -2064,18 +2173,26 @@ ${this.escapeHtml(entry.resolvedTurn ?? entry.createdTurn ?? gameState.turn)}</p
         const isDone = !required || Boolean(state.progress[required]);
         const isFinalStep = state.stepIndex === steps.length - 1;
         const progressText = `${state.stepIndex + 1}/${steps.length}`;
+        const wasMinimized = panel.classList.contains('is-minimized');
         panel.innerHTML = `
-            <div class="tutorial-header">
-                <strong>Tutorial</strong>
-                <span class="tutorial-progress">${progressText}</span>
+            <div class="tutorial-header" title="Arraste para mover o tutorial">
+                <strong>Tutorial <span class="tutorial-drag-hint">· arraste para mover</span></strong>
+                <div class="tutorial-header-controls">
+                    <span class="tutorial-progress">${progressText}</span>
+                    <button class="tutorial-minimize" type="button" data-tutorial="minimize"
+                        aria-label="${wasMinimized ? 'Restaurar tutorial' : 'Minimizar tutorial'}"
+                        aria-expanded="${!wasMinimized}">${wasMinimized ? '+' : '−'}</button>
+                </div>
             </div>
-            <h3>${this.escapeHtml(step.title)}</h3>
-            <p>${this.escapeHtml(step.description)}</p>
-            ${required ? `<p class="tutorial-status ${isDone ? 'done' : 'pending'}">${isDone ? 'Concluído' : 'Aguardando ação'}</p>` : ''}
-            <div class="tutorial-actions">
-                <button class="menu-btn" data-tutorial="prev" ${state.stepIndex === 0 ? 'disabled' : ''}>Voltar</button>
-                <button class="menu-btn" data-tutorial="next" ${(isFinalStep && !isDone) ? 'disabled' : ''}>${isFinalStep ? 'Concluir' : 'Próximo'}</button>
-                <button class="menu-btn" data-tutorial="skip">Pular</button>
+            <div class="tutorial-content">
+                <h3>${this.escapeHtml(step.title)}</h3>
+                <p>${this.escapeHtml(step.description)}</p>
+                ${required ? `<p class="tutorial-status ${isDone ? 'done' : 'pending'}">${isDone ? 'Concluído' : 'Aguardando ação'}</p>` : ''}
+                <div class="tutorial-actions">
+                    <button class="menu-btn" data-tutorial="prev" ${state.stepIndex === 0 ? 'disabled' : ''}>Voltar</button>
+                    <button class="menu-btn" data-tutorial="next" ${(isFinalStep && !isDone) ? 'disabled' : ''}>${isFinalStep ? 'Concluir' : 'Próximo'}</button>
+                    <button class="menu-btn" data-tutorial="skip">Pular</button>
+                </div>
             </div>
         `;
         panel.querySelector('[data-tutorial="prev"]')?.addEventListener('click', () => this.advanceTutorialStep(-1));
@@ -2200,7 +2317,7 @@ ${this.escapeHtml(entry.resolvedTurn ?? entry.createdTurn ?? gameState.turn)}</p
                 }
             });
             if (nearestTown && Number.isFinite(nearestDistance) && nearestDistance <= 8) {
-                locationText = ` near ${nearestTown}`;
+                locationText = ` perto de ${nearestTown}`;
             }
         }
 
@@ -2235,7 +2352,7 @@ ${this.escapeHtml(entry.resolvedTurn ?? entry.createdTurn ?? gameState.turn)}</p
         }
 
         const baseMessage = ourUnit && enemyUnit
-            ? `${outcome}${locationText}: Our ${ourUnit.name} ${ourUnit.health}/${ourUnit.maxHealth} HP vs ${enemyUnit.name} ${enemyUnit.health}/${enemyUnit.maxHealth} HP`
+            ? `${outcome}${locationText}: Nossa unidade ${ourUnit.name} ${ourUnit.health}/${ourUnit.maxHealth} PV vs ${enemyUnit.name} ${enemyUnit.health}/${enemyUnit.maxHealth} HP`
             : `${outcome}${locationText}: ${attacker.name} ${attacker.health}/${attacker.maxHealth} HP vs ${defender.name} ${defender.health}/${defender.maxHealth} HP`;
         const tacticalSummary = result?.summary ? ` | ${result.summary}` : '';
         const combatLogTail = Array.isArray(result?.combatLog) && result.combatLog.length > 0
@@ -2281,12 +2398,12 @@ ${this.escapeHtml(entry.resolvedTurn ?? entry.createdTurn ?? gameState.turn)}</p
             const slot = slots[i - 1];
             content += `
                 <button class="menu-btn" onclick="uiManager.saveToSlot(${i})">
-                    <span class="btn-text">Slot ${i}${slot ? ` - ${slot.playerName} (Turno ${slot.turn})` : ' Vazio'}</span>
+                    <span class="btn-text">Slot ${i}${slot ? ` - ${slot.playerName} (Turno ${slot.turn})` : ' - Vazio'}</span>
                 </button>
             `;
         }
 
-        content += '</div>';
+        content += '<button class="menu-btn" onclick="uiManager.closeModal()">Fechar</button></div>';
         this.showModal(content);
     }
 
@@ -2296,19 +2413,25 @@ ${this.escapeHtml(entry.resolvedTurn ?? entry.createdTurn ?? gameState.turn)}</p
     showLoadGameModal() {
         const slots = storageManager.getAllSaveSlots();
         let content = '<h2>Carregar Jogo</h2><div style="display:flex;flex-direction:column;gap:1rem;">';
+        let hasSaves = false;
 
         for (let i = 1; i <= 3; i++) {
             const slot = slots[i - 1];
             if (slot) {
+                hasSaves = true;
                 content += `
                     <button class="menu-btn" onclick="uiManager.loadFromSlot(${i})">
-                        <span class="btn-text">Slot ${i} ${slot.playerName} (Turno ${slot.turn})</span>
+                        <span class="btn-text">Slot ${i} - ${slot.playerName} (Turno ${slot.turn})</span>
                     </button>
                 `;
             }
         }
 
-        content += '</div>';
+        if (!hasSaves) {
+            content += '<p style="text-align:center;opacity:0.8;">Nenhum jogo salvo encontrado nos slots manuais.</p>';
+        }
+
+        content += '<button class="menu-btn" onclick="uiManager.closeModal()">Fechar</button></div>';
         this.showModal(content);
     }
 
@@ -2488,7 +2611,7 @@ ${this.escapeHtml(entry.resolvedTurn ?? entry.createdTurn ?? gameState.turn)}</p
             </div>
         `).join('');
 
-        /*const content = `
+        const content = `
             <h2>🧩 Gerenciador de Mods</h2>
             <p style="font-size:0.9rem; opacity:0.8; margin-bottom:1rem;">Personalize sua experiência em 500 d.C. Cole o JSON do mod, envie um arquivo de mod ou carregue mods de exemplo pré-empacotados.</p>
             
@@ -2525,7 +2648,7 @@ ${this.escapeHtml(entry.resolvedTurn ?? entry.createdTurn ?? gameState.turn)}</p
             <div style="margin-top: 1.5rem; display: flex; justify-content: flex-end;">
                 <button class="action-btn" data-mod-action="close">Fechar</button>
             </div>
-        `;*/
+        `;
 
         this.showModal(content);
         this.bindModsModalHandlers();

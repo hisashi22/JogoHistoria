@@ -137,8 +137,8 @@ class Minimap {
         const maxX = (this.gameMap.width * MAP_CONFIG.tileSize) - this.gameMap.canvas.width;
         const maxY = (this.gameMap.height * MAP_CONFIG.tileSize) - this.gameMap.canvas.height;
 
-        this.gameMap.camera.x = Math.max(0, Math.min(maxX, worldX));
-        this.gameMap.camera.y = Math.max(0, Math.min(maxY, worldY));
+        this.gameMap.camera.x = maxX <= 0 ? Math.floor(maxX / 2) : Math.max(0, Math.min(maxX, worldX));
+        this.gameMap.camera.y = maxY <= 0 ? Math.floor(maxY / 2) : Math.max(0, Math.min(maxY, worldY));
 
         // Re-render both maps
         this.gameMap.requestRender();

@@ -223,7 +223,14 @@ class StorageManager {
      */
     deleteSave(slotNumber) {
         try {
-            const key = STORAGE_KEYS[`SAVE_SLOT_${slotNumber}`];
+            const normalizedSlot = this.normalizeSlotNumber(slotNumber);
+            if (normalizedSlot === null || normalizedSlot === 0) {
+                return { success: false, message: 'Número de slot de salvamento inválido' };
+            }
+            const key = this.getSlotKey(normalizedSlot);
+            if (!key) {
+                return { success: false, message: 'Número de slot de salvamento inválido' };
+            }
             localStorage.removeItem(key);
             return { success: true, message: 'Salvamento excluído com sucesso' };
         } catch (error) {

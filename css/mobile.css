@@ -512,3 +512,535 @@ select,
 textarea {
     font-size: 16px;
 }
+
+/* === Responsive layout corrections (preserve game systems and visual theme) === */
+@media (max-width: 768px) {
+    html,
+    body,
+    .screen {
+        min-width: 0;
+        min-height: 0;
+    }
+
+    #main-menu {
+        align-items: center;
+        justify-content: center;
+        overflow-y: auto;
+        padding: max(12px, env(safe-area-inset-top)) 12px max(12px, env(safe-area-inset-bottom));
+    }
+
+    .menu-content {
+        width: 100%;
+        max-width: 500px;
+        padding: clamp(12px, 4vw, 24px);
+    }
+
+    .main-menu-nav {
+        width: 100%;
+        margin-top: clamp(16px, 5vh, 32px);
+    }
+
+    #leader-selection {
+        min-height: 0;
+        padding: max(10px, env(safe-area-inset-top)) 10px max(10px, env(safe-area-inset-bottom));
+    }
+
+    #leader-selection .screen-header {
+        gap: 10px;
+        flex-wrap: wrap;
+    }
+
+    #leader-selection .screen-header h2 {
+        flex: 1 1 180px;
+        min-width: 0;
+        font-size: clamp(1.15rem, 4vw, 1.5rem);
+        text-align: right;
+    }
+
+    .selection-steps {
+        gap: 18px;
+        padding: 10px 2px;
+    }
+
+    .selection-step h3 {
+        font-size: 1.05rem;
+    }
+
+    .century-tabs,
+    .faction-tabs,
+    .scenario-tabs {
+        align-items: stretch;
+    }
+
+    .century-tab,
+    .faction-tab,
+    .scenario-tab {
+        max-width: 100%;
+        overflow-wrap: anywhere;
+    }
+
+    .leaders-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .leader-detail.active {
+        min-width: 0;
+        gap: 12px;
+    }
+
+    .leader-info,
+    .leader-bio,
+    .leader-abilities {
+        min-width: 0;
+        overflow-wrap: anywhere;
+    }
+
+    /* Stack the HUD instead of forcing eight resources into one row. */
+    .game-hud {
+        flex: 0 0 auto;
+        width: 100%;
+        min-width: 0;
+        flex-direction: column;
+        align-items: stretch;
+        gap: 6px;
+        padding: max(5px, env(safe-area-inset-top)) 8px 6px;
+    }
+
+    .hud-top {
+        width: 100%;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 6px;
+    }
+
+    .hud-resources {
+        flex: 1 1 100%;
+        min-width: 0;
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 4px;
+    }
+
+    .resource {
+        min-width: 0;
+        justify-content: center;
+        gap: 3px;
+        padding: 3px 4px;
+    }
+
+    .resource-icon {
+        font-size: clamp(0.75rem, 3vw, 1rem);
+    }
+
+    .resource-value {
+        min-width: 0;
+        font-size: clamp(0.68rem, 2.8vw, 0.85rem);
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .hud-turn {
+        flex: 1 1 auto;
+        justify-content: center;
+        min-width: 0;
+        padding: 3px 8px;
+    }
+
+    .hud-actions {
+        flex: 0 0 auto;
+    }
+
+    .hud-btn {
+        width: 40px;
+        height: 40px;
+    }
+
+    .hud-minimap {
+        align-self: flex-end;
+        max-width: 100%;
+    }
+
+    .minimap-container {
+        width: clamp(100px, 25vw, 145px);
+    }
+
+    .game-map-container {
+        flex: 1 1 0;
+        min-width: 0;
+        min-height: 0;
+    }
+
+    .command-overview {
+        top: 8px;
+        left: 8px;
+        right: 8px;
+        width: auto;
+        max-width: none;
+        max-height: min(34vh, 270px);
+    }
+
+    .command-overview .overview-grid {
+        min-height: 0;
+        overflow-y: auto;
+        overscroll-behavior: contain;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .unit-panel {
+        left: 8px;
+        right: 8px;
+        bottom: calc(112px + env(safe-area-inset-bottom));
+        width: auto;
+        max-width: none;
+        max-height: min(30vh, 210px);
+    }
+
+    .action-bar {
+        flex: 0 0 auto;
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 4px;
+        width: 100%;
+        max-width: 100%;
+        overflow: visible;
+        padding: 6px 6px max(6px, env(safe-area-inset-bottom));
+    }
+
+    .action-bar-btn {
+        min-width: 0;
+        min-height: 46px;
+        padding: 4px 3px;
+    }
+
+    .action-bar-btn .btn-icon {
+        font-size: 1.1rem;
+    }
+
+    .action-bar-btn .btn-label {
+        font-size: 0.65rem;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        max-width: 100%;
+    }
+
+    .action-bar-btn.primary {
+        grid-column: span 2;
+    }
+
+    .hud-btn {
+        width: 44px;
+        height: 44px;
+    }
+
+    .close-btn,
+    .overview-icon-btn {
+        width: 44px;
+        height: 44px;
+        min-width: 44px;
+        min-height: 44px;
+    }
+
+    .unit-actions .action-btn {
+        min-height: 44px;
+        font-size: 0.75rem;
+    }
+
+    .tutorial-minimize,
+    .tutorial-actions .menu-btn {
+        min-width: 44px;
+        min-height: 44px;
+    }
+
+
+    .modal-overlay {
+        padding: 10px;
+        overflow-y: auto;
+    }
+
+    .modal {
+        width: 100%;
+        max-width: 560px;
+        max-height: calc(100dvh - 20px - env(safe-area-inset-top) - env(safe-area-inset-bottom));
+        overflow-y: auto;
+        overscroll-behavior: contain;
+    }
+}
+
+/* Small phones: avoid narrow columns and clipped controls. */
+@media (max-width: 420px) {
+    .hud-resources {
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+
+    .resource {
+        flex-direction: column;
+        gap: 0;
+        line-height: 1.1;
+    }
+
+    .resource-value {
+        font-size: 0.7rem;
+    }
+
+    .command-overview .overview-actions {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .leaders-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 8px;
+    }
+
+    .leader-card {
+        min-width: 0;
+        padding: 8px;
+    }
+}
+
+/* Narrow portrait phones. */
+@media (max-width: 340px) {
+    .game-title {
+        font-size: 1.75rem;
+    }
+
+    .hud-resources {
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+
+    .resource-icon {
+        font-size: 0.72rem;
+    }
+
+    .resource-value {
+        font-size: 0.64rem;
+    }
+
+    .screen-header .back-btn {
+        padding: 6px 9px;
+        font-size: 0.85rem;
+    }
+}
+
+/* Tablets and compact laptop windows. */
+@media (min-width: 769px) and (max-width: 1100px) {
+    .game-hud {
+        gap: 8px;
+        padding: 6px 10px;
+    }
+
+    .hud-top {
+        gap: 8px;
+    }
+
+    .hud-resources {
+        flex-wrap: nowrap;
+        overflow-x: auto;
+        gap: 4px;
+    }
+
+    .command-overview,
+    .unit-panel {
+        /* The minimap keeps the tablet HUD 118px tall; leave a clear gap below it. */
+        top: 126px;
+    }
+
+    .resource {
+        padding: 3px 5px;
+    }
+
+    .resource-icon {
+        font-size: 0.95rem;
+    }
+
+    .resource-value {
+        font-size: 0.82rem;
+    }
+
+    .minimap-container {
+        width: clamp(110px, 17vw, 180px);
+    }
+
+    .command-overview {
+        width: min(320px, 34vw);
+    }
+
+    .unit-panel {
+        width: min(320px, 34vw);
+    }
+
+    .action-bar {
+        gap: 8px;
+        overflow-x: auto;
+    }
+}
+
+/* Short landscape screens: prioritize map area and keep controls reachable. */
+@media (orientation: landscape) and (max-height: 600px) {
+    .game-hud {
+        gap: 4px;
+        padding: 4px 8px;
+    }
+
+    .hud-top {
+        gap: 5px;
+    }
+
+    .hud-resources {
+        flex-wrap: wrap;
+    }
+
+    .resource {
+        padding: 2px 4px;
+    }
+
+    .minimap-container {
+        width: clamp(90px, 16vw, 130px);
+    }
+
+    .action-bar {
+        padding-top: 4px;
+        padding-bottom: max(4px, env(safe-area-inset-bottom));
+    }
+
+    .action-bar-btn {
+        min-height: 44px;
+        padding: 3px 6px;
+    }
+
+    .unit-panel {
+        max-height: min(48vh, 190px);
+    }
+}
+
+
+/* Floating tutorial window: movable by its header on mouse and touch. */
+.tutorial-panel {
+    left: auto;
+    top: auto;
+    right: max(12px, env(safe-area-inset-right));
+    bottom: calc(150px + env(safe-area-inset-bottom));
+    transform: none;
+    width: min(380px, calc(100vw - 24px));
+    max-width: calc(100vw - 16px);
+    max-height: min(58vh, 430px);
+    overflow: auto;
+}
+
+.tutorial-panel .tutorial-header {
+    min-height: 30px;
+}
+
+@media (max-width: 768px) {
+    .tutorial-panel {
+        width: min(340px, calc(100vw - 16px));
+        bottom: calc(84px + env(safe-area-inset-bottom));
+        max-height: min(55dvh, 360px);
+        padding: 10px;
+    }
+
+    .tutorial-drag-hint {
+        display: none;
+    }
+
+    .tutorial-actions {
+        flex-wrap: wrap;
+    }
+
+    .tutorial-actions .menu-btn {
+        min-width: 0;
+    }
+}
+
+@media (orientation: landscape) and (max-height: 600px) {
+    .tutorial-panel {
+        bottom: calc(70px + env(safe-area-inset-bottom));
+        max-height: 48dvh;
+        padding: 8px 10px;
+    }
+
+    .tutorial-panel p {
+        margin-bottom: 6px;
+        font-size: 0.82rem;
+    }
+
+    .tutorial-actions .menu-btn {
+        min-height: 34px;
+        padding: 5px 8px;
+    }
+}
+
+
+/* Keep the floating tutorial clear of side panels on desktop/tablet. */
+@media (min-width: 769px) {
+    .tutorial-panel {
+        left: 50%;
+        right: auto;
+        transform: translateX(-50%);
+    }
+}
+
+@media (min-width: 769px) and (max-width: 1100px) {
+    .tutorial-panel {
+        width: min(320px, calc(100vw - 32px));
+        max-height: min(45vh, 340px);
+    }
+}
+
+/* On touch layouts, stack the tutorial between the overview and unit panel. */
+@media (max-width: 768px) {
+    .tutorial-panel {
+        top: calc(16px + min(34vh, 270px) + env(safe-area-inset-top));
+        bottom: auto;
+        left: 8px;
+        right: 8px;
+        width: auto;
+        max-width: none;
+        max-height: clamp(120px, calc(100dvh - min(34vh, 270px) - 210px - 112px - 40px), 180px);
+        padding: 10px;
+    }
+}
+
+
+/* === Responsive fixes (QA): keep floating panels clear of the HUD and action bar ===
+   --hud-h / --bar-h are published by UIManager.updateGameLayoutMetrics(). */
+@media (max-width: 1100px) {
+    .command-overview {
+        top: calc(var(--hud-h, 118px) + 8px);
+    }
+}
+
+@media (min-width: 769px) and (max-width: 1100px) {
+    .command-overview {
+        max-height: min(72vh, 620px, calc(100dvh - var(--hud-h, 118px) - var(--bar-h, 112px) - 16px));
+    }
+}
+
+@media (max-width: 768px) {
+    .command-overview {
+        max-height: min(34vh, 270px, calc(100dvh - var(--hud-h, 200px) - var(--bar-h, 112px) - 24px));
+    }
+
+    .tutorial-panel {
+        top: calc(var(--hud-h, 200px) + 16px + min(34vh, 270px) + env(safe-area-inset-top));
+    }
+}
+
+@media (orientation: landscape) and (max-height: 600px) {
+    .command-overview {
+        top: calc(var(--hud-h, 60px) + 8px);
+        max-height: calc(100dvh - var(--hud-h, 60px) - var(--bar-h, 64px) - 16px);
+    }
+}
+
+/* Touch targets inside modals (mods manager, recruitment, etc.). */
+@media (max-width: 1024px) {
+    #modal-content .action-btn,
+    #modal-content input[type="file"] {
+        min-height: 44px;
+    }
+
+    #modal-content .action-btn {
+        min-width: 44px;
+    }
+}

@@ -15,12 +15,6 @@
 
 /* === CSS Variables - Classic Strategy Design System === */
 :root {
-
-    --deep-blue: #0b131f;            /* Azul-petróleo noturno */
-    --byzantine-purple-dark: #151d2a; /* Azul-aço militar escuro */
-    --crimson-dark: #211c15;          /* Bronze escuro antigo */
-
-
     /* Colonization-inspired Color Palette */
     --gold: #D4AF37;
     --imperial-gold: #D4AF37;
@@ -29,6 +23,7 @@
     --wood-brown: #5D4037;
     --deep-red: #8B0000;
     --byzantine-purple: #702963;
+    --byzantine-purple-light: #8E3B7E;
     --byzantine-purple-dark: #3F1D5A;
     --deep-blue: #0F2A4A;
     --byzantine-blue: #2563EB;
@@ -44,16 +39,18 @@
     --canvas-bg: #1A1A1A;
 
     /* UI Aesthetic */
-    --bg-primary: url('../assets/textures/parchment.jpg'), var(--parchment);
+    --bg-primary: linear-gradient(180deg, #F6E9C8 0%, var(--parchment) 55%, #E6CFA1 100%);
     --bg-panel: rgba(244, 228, 188, 0.9);
     --bg-card: rgba(210, 180, 140, 0.8);
     --border-classic: 2px solid var(--wood-brown);
     --shadow-classic: 2px 2px 10px rgba(0, 0, 0, 0.4);
+    --shadow-gold: 0 0 16px rgba(212, 175, 55, 0.45);
+    --shadow-deep: 0 12px 30px rgba(0, 0, 0, 0.55);
 
-    /* Typography - Old World Feel */
-    --font-display: 'Old Standard TT', serif;
-    --font-body: 'Crimson Text', serif;
-    --font-accent: 'ImperialDisplayLocal', 'Old Standard TT', serif;
+    /* Typography */
+    --font-display: 'Cinzel', 'Old Standard TT', serif;
+    --font-body: 'Inter', 'Crimson Text', serif;
+    --font-accent: 'ImperialDisplayLocal', 'Cinzel', serif;
 
     /* Spacing */
     --spacing-xs: 0.25rem;
@@ -73,7 +70,6 @@
     --radius-md: 8px;
     --radius-lg: 12px;
 }
-
 /* === Reset & Base Styles === */
 * {
     margin: 0;
